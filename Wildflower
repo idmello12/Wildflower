@@ -1,0 +1,183 @@
+// User model schema
+const UserSchema = new Schema({
+    username: String,
+    email: String,
+    password: String,
+    // Other user details
+});
+
+// User authentication routes (using Passport.js)
+app.post('/api/signup', UserController.signup);
+app.post('/api/login', UserController.login);
+app.get('/api/logout', UserController.logout);
+// Movie/Playlist model schema
+const MovieSchema = new Schema({
+    title: String,
+    director: String,
+    year: Number,
+    // Other movie details
+});
+
+// Playlist model schema
+const PlaylistSchema = new Schema({
+    name: String,
+    tracks: [{ type: Schema.Types.ObjectId, ref: 'Track' }],
+    // Other playlist details
+});
+
+// Routes for browsing movies/playlists and sharing them
+app.get('/api/movies', MovieController.getAllMovies);
+app.get('/api/playlists', PlaylistController.getAllPlaylists);
+app.post('/api/share-movie', MovieController.shareMovie);
+app.post('/api/share-playlist', PlaylistController.sharePlaylist);
+// Post model schema
+const PostSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    // Other post details
+});
+
+// Comment model schema
+const CommentSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    // Other comment details
+});
+
+// Routes for creating posts, liking/commenting on posts, etc.
+app.post('/api/create-post', PostController.createPost);
+app.post('/api/like-post/:postId', PostController.likePost);
+app.post('/api/comment-post/:postId', PostController.commentPost);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram-like App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <span class="logo">Instagram</span>
+        <div class="search-box">
+            <input type="text" placeholder="Search">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Explore</a></li>
+            <li><a href="#">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Posts -->
+        <div class="posts">
+            <!-- Sample post -->
+            <div class="post">
+                <img src="sample-image.jpg" alt="Sample Image">
+                <div class="post-details">
+                    <div class="post-actions">
+                        <button class="like-btn">Like</button>
+                        <button class="comment-btn">Comment</button>
+                    </div>
+                    <div class="post-comments">
+                        <div class="comment">User1: Nice photo!</div>
+                        <div class="comment">User2: Love it!</div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of sample post -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navigation bar styles */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: auto;
+}
+
+.search-box input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.nav-links {
+    list-style-type: none;
+}
+
+.nav-links li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Main content styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+.post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.post img {
+    width: 100%;
+    display: block;
+}
+
+.post-details {
+    padding: 10px;
+}
+
+.post-actions button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.post-comments {
+    margin-top: 10px;
+}
+
+.comment {
+    margin-bottom: 5px;
+}
